@@ -153,9 +153,12 @@ function hygge_render_field( $post_id, $id, $label, $type = 'text', $description
     }
     echo '<div class="' . esc_attr($wrapper_class) . '" style="margin-bottom: 15px;">';
     echo '<label for="' . esc_attr( $id ) . '" style="display:block; font-weight:bold; margin-bottom:5px;">' . esc_html( $label ) . '</label>';
-    
+
+    // Вимикаємо розширення для перевірки граматики, які часто крадуть фокус у великих формах
+    $disable_ext = ' data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" spellcheck="false"';
+
     if ( $type === 'textarea' ) {
-        echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $id ) . '" style="width:100%; min-height:80px;">' . esc_textarea( $value ) . '</textarea>';
+        echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $id ) . '" style="width:100%; min-height:80px;"' . $disable_ext . '>' . esc_textarea( $value ) . '</textarea>';
     } else {
         echo '<input type="' . esc_attr( $type ) . '" id="' . esc_attr( $id ) . '" name="' . esc_attr( $id ) . '" value="' . esc_attr( $value ) . '" style="width:100%;" />';
     }
