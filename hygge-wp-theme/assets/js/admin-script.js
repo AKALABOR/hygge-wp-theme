@@ -58,7 +58,7 @@ jQuery(document).ready(function($) {
             tabIndex++;
         });
         
-        // Tab click event
+// Tab click event
         $tabsContainer.on('click', '.hygge-admin-tab-btn', function(e) {
             e.preventDefault();
             var $btn = $(this);
@@ -72,6 +72,12 @@ jQuery(document).ready(function($) {
             var $box = $btn.closest('.inside');
             $box.find('.hygge-tab-content').removeClass('active');
             $box.find('#' + targetId).addClass('active');
+
+            // Фікс для WordPress editor-expand.js: змушуємо систему перерахувати макет
+            setTimeout(function() {
+                $(window).trigger('resize');
+                $(document).trigger('postbox-toggled');
+            }, 50);
         });
     });
 
