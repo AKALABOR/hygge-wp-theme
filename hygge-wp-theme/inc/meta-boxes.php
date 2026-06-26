@@ -839,15 +839,23 @@ function hygge_save_meta_boxes( $post_id ) {
 
         if ( $should_save ) {
             if ( $key === 'promo_benefits_html' ) {
-                if ( current_user_can('unfiltered_html') ) {
-                    update_post_meta( $post_id, $key, wp_unslash( $value ) );
-                } else {
-                    update_post_meta( $post_id, $key, wp_kses_post( wp_unslash( $value ) ) );
-                }
-            } elseif ( strpos( $key, 'text' ) !== false || strpos( $key, 'subtitle' ) !== false ) {
-                update_post_meta( $post_id, $key, sanitize_textarea_field( wp_unslash( $value ) ) );
-            } elseif ( strpos( $key, 'icon' ) !== false ) {
-                // allow SVG tags for icons
+            if ( current_user_can('unfiltered_html') ) {
+                update_post_meta( $post_id, $key, wp_unslash( $value ) );
+            } else {
+                update_post_meta( $post_id, $key, wp_kses_post( wp_unslash( $value ) ) );
+            }
+        } elseif ( strpos( $key, 'text' ) !== false || strpos( $key, 'subtitle' ) !== false ) {
+            update_post_meta( $post_id, $key, sanitize_textarea_field( wp_unslash( $value ) ) );
+        } elseif ( strpos( $key, 'icon' ) !== false ) {
+            // Дозволяємо SVG та емодзі для адміністраторів (unfiltered_html)
+            if ( current_user_can('unfiltered_html') ) {
+                update_post_meta( $post_id, $key, wp_unslash( $value ) );
+            } else {
+                update_post_meta( $post_id, $key, wp_kses( wp_unslash( $value ), array( 'svg' => array( 'class' => true, 'viewbox' => true, 'xmlns' => true, 'fill' => true, 'width' => true, 'height' => true ), 'path' => array( 'd' => true, 'fill' => true ) ) ) );
+            }
+        } else {
+            update_post_meta( $post_id, $key, sanitize_text_field( wp_unslash( $value ) ) );
+        }
                 update_post_meta( $post_id, $key, wp_kses( wp_unslash( $value ), array( 'svg' => array( 'class' => true, 'viewbox' => true, 'xmlns' => true, 'fill' => true, 'width' => true, 'height' => true ), 'path' => array( 'd' => true, 'fill' => true ) ) ) );
             } else {
                 update_post_meta( $post_id, $key, sanitize_text_field( wp_unslash( $value ) ) );
