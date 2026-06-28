@@ -24,7 +24,7 @@ get_header();
                     <?php 
                     $mig_hero_img_url = get_post_meta( get_the_ID(), 'mig_hero_img_url', true );
                     if ( $mig_hero_img_url ) : ?>
-                        <img src="<?php echo esc_url($mig_hero_img_url); ?>" alt="Міграція даних на SAP" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                        <img src="<?php echo esc_url($mig_hero_img_url); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $mig_hero_img_url, 'Міграція даних на SAP' ) ); ?>" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
                     <?php elseif ( has_post_thumbnail() ) : ?>
                         <?php the_post_thumbnail('full'); ?>
                     <?php else: ?>
@@ -138,7 +138,7 @@ get_header();
                     ?>
                     <div id="tab<?php echo $i; ?>" class="tab-panel <?php echo $active_class; ?>">
                         <div class="tab-image-placeholder">
-                            <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($title); ?>" class="content-image">
+                            <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $img, $title ) ); ?>" class="content-image">
                         </div>
                         <h3><?php echo esc_html($title); ?></h3>
                         <p><?php echo esc_html($text); ?></p>

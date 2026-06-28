@@ -58,7 +58,7 @@ get_header();
                 <?php 
                 $hero_img_url = get_post_meta( get_the_ID(), 'hero_img_url', true );
                 if ( $hero_img_url ) : ?>
-                    <img src="<?php echo esc_url($hero_img_url); ?>" alt="Головне зображення" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                    <img src="<?php echo esc_url($hero_img_url); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $hero_img_url, 'Інтерфейс програми' ) ); ?>" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
                 <?php elseif ( has_post_thumbnail() ) : ?>
                     <?php the_post_thumbnail('full'); ?>
                 <?php else: ?>
@@ -192,7 +192,7 @@ get_header();
                     ?>
                     <div id="tab<?php echo $i; ?>" class="tab-panel <?php echo $active_class; ?>">
                         <div class="tab-image-placeholder">
-                            <img src="<?php echo esc_url($img); ?>" class="content-image">
+                            <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $img, 'Ілюстрація' ) ); ?>" class="content-image">
                         </div>
                         <h3><?php echo esc_html($title); ?></h3>
                         <p><?php echo esc_html($text); ?></p>

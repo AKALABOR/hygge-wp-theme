@@ -24,7 +24,7 @@ get_header();
                     <?php 
                     $sap_hero_img_url = get_post_meta( get_the_ID(), 'sap_hero_img_url', true );
                     if ( $sap_hero_img_url ) : ?>
-                        <img src="<?php echo esc_url($sap_hero_img_url); ?>" alt="Інтерфейс системи SAP Business One" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                        <img src="<?php echo esc_url($sap_hero_img_url); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $sap_hero_img_url, 'Інтерфейс системи SAP Business One' ) ); ?>" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
                     <?php elseif ( has_post_thumbnail() ) : ?>
                         <?php the_post_thumbnail('full'); ?>
                     <?php else: ?>

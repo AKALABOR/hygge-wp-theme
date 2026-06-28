@@ -775,6 +775,15 @@ function hygge_save_meta_boxes( $post_id ) {
         'fp_tab2_btn', 'fp_tab2_img', 'fp_tab2_title', 'fp_tab2_text',
         'fp_tab3_btn', 'fp_tab3_img', 'fp_tab3_title', 'fp_tab3_text',
         'fp_tab4_btn', 'fp_tab4_img', 'fp_tab4_title', 'fp_tab4_text',
+        'hero_badge', 'hero_title_highlight', 'hero_title_main', 'hero_subtitle', 'hero_btn1', 'hero_btn1_url', 'hero_btn2', 'hero_btn2_url',
+        'problems_title', 'problems_text', 'solution_title', 'solution_text',
+        'fp_about_title', 'fp_about_text',
+        'fp_comp_title', 'fp_comp_th1', 'fp_comp_th2', 'fp_comp_th3',
+        'fp_serv_title',
+        'fp_proc_title',
+        'fp_integ_title', 'fp_integ_subtitle',
+        'fp_cases_title',
+        'fp_trans_title', 'fp_trans_text', 'fp_trans_btn', 'fp_trans_btn_url',
         'sap_badge', 'sap_hero_title', 'sap_hero_text', 'sap_btn1', 'sap_btn2', 'sap_btn1_url', 'sap_btn2_url',
         'sap_intro_title', 'sap_intro_text1', 'sap_intro_text2', 'sap_stat1_num', 'sap_stat1_text', 'sap_stat2_num', 'sap_stat2_text', 'sap_stat3_num', 'sap_stat3_text',
         'sap_modules_title', 'sap_tech_title', 'sap_tech_text', 'sap_hana_badge', 'sap_deploy_title', 'sap_deploy_subtitle', 'sap_features_title',
@@ -818,7 +827,7 @@ function hygge_save_meta_boxes( $post_id ) {
     ];
 
     // Repeater prefixes
-    $repeater_prefixes = ['prob', 'fp_tab', 'sap_mod', 'sap_tech_check', 'sap_dep_op_l', 'sap_dep_cl_l', 'sap_feat', 'mig_tab', 'mig_orbit_item', 'mig_sys', 'mig_risk', 'mig_sol', 'mig_step', 'prod_feat', 'prod_demo', 'case_detail'];
+    $repeater_prefixes = ['prob', 'fp_tab', 'fp_about', 'fp_comp', 'fp_serv', 'fp_proc', 'fp_integ', 'fp_cases', 'sap_mod', 'sap_tech_check', 'sap_dep_op_l', 'sap_dep_cl_l', 'sap_feat', 'mig_tab', 'mig_orbit_item', 'mig_sys', 'mig_risk', 'mig_sol', 'mig_step', 'prod_feat', 'prod_demo', 'case_detail'];
 
     foreach ( $_POST as $key => $value ) {
         $should_save = false;
@@ -839,24 +848,31 @@ function hygge_save_meta_boxes( $post_id ) {
 
         if ( $should_save ) {
             if ( $key === 'promo_benefits_html' ) {
-            if ( current_user_can('unfiltered_html') ) {
-                update_post_meta( $post_id, $key, wp_unslash( $value ) );
-            } else {
-                update_post_meta( $post_id, $key, wp_kses_post( wp_unslash( $value ) ) );
-            }
-        } elseif ( strpos( $key, 'text' ) !== false || strpos( $key, 'subtitle' ) !== false ) {
-            update_post_meta( $post_id, $key, sanitize_textarea_field( wp_unslash( $value ) ) );
-        } elseif ( strpos( $key, 'icon' ) !== false ) {
-            // Дозволяємо SVG та емодзі для адміністраторів (unfiltered_html)
-            if ( current_user_can('unfiltered_html') ) {
-                update_post_meta( $post_id, $key, wp_unslash( $value ) );
-            } else {
-                update_post_meta( $post_id, $key, wp_kses( wp_unslash( $value ), array( 'svg' => array( 'class' => true, 'viewbox' => true, 'xmlns' => true, 'fill' => true, 'width' => true, 'height' => true ), 'path' => array( 'd' => true, 'fill' => true ) ) ) );
-            }
-        } else {
-            update_post_meta( $post_id, $key, sanitize_text_field( wp_unslash( $value ) ) );
-        }
-                update_post_meta( $post_id, $key, wp_kses( wp_unslash( $value ), array( 'svg' => array( 'class' => true, 'viewbox' => true, 'xmlns' => true, 'fill' => true, 'width' => true, 'height' => true ), 'path' => array( 'd' => true, 'fill' => true ) ) ) );
+                if ( current_user_can('unfiltered_html') ) {
+                    update_post_meta( $post_id, $key, wp_unslash( $value ) );
+                } else {
+                    update_post_meta( $post_id, $key, wp_kses_post( wp_unslash( $value ) ) );
+                }
+            } elseif ( strpos( $key, 'text' ) !== false || strpos( $key, 'subtitle' ) !== false ) {
+                update_post_meta( $post_id, $key, sanitize_textarea_field( wp_unslash( $value ) ) );
+            } elseif ( strpos( $key, 'icon' ) !== false ) {
+                // Дозволяємо SVG та емодзі
+                if ( current_user_can('unfiltered_html') ) {
+                    update_post_meta( $post_id, $key, wp_unslash( $value ) );
+                } else {
+                    $allowed_svg = array(
+                        'svg' => array( 'class' => true, 'viewbox' => true, 'xmlns' => true, 'fill' => true, 'width' => true, 'height' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true, 'style' => true ),
+                        'path' => array( 'd' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true, 'style' => true ),
+                        'circle' => array( 'cx' => true, 'cy' => true, 'r' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true ),
+                        'line' => array( 'x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'stroke' => true, 'stroke-width' => true ),
+                        'rect' => array( 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true ),
+                        'polyline' => array( 'points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true ),
+                        'polygon' => array( 'points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true ),
+                        'g' => array( 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true )
+                    );
+                    // wp_kses strips emojis sometimes if mbstring is not configured correctly, but WordPress handles it via wp_encode_emoji.
+                    update_post_meta( $post_id, $key, wp_kses( wp_unslash( $value ), $allowed_svg ) );
+                }
             } else {
                 update_post_meta( $post_id, $key, sanitize_text_field( wp_unslash( $value ) ) );
             }

@@ -59,7 +59,7 @@ get_header();
                     <?php 
                     $article_hero_img_url = get_post_meta( get_the_ID(), 'article_hero_img_url', true );
                     if ( $article_hero_img_url ) : ?>
-                        <img src="<?php echo esc_url($article_hero_img_url); ?>" alt="<?php the_title_attribute(); ?>" class="article-cover">
+                        <img src="<?php echo esc_url($article_hero_img_url); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $article_hero_img_url, get_the_title() ) ); ?>" class="article-cover">
                     <?php elseif ( has_post_thumbnail() ) : ?>
                         <?php the_post_thumbnail('full', array('class' => 'article-cover')); ?>
                     <?php else: ?>

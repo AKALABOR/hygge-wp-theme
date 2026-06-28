@@ -32,7 +32,7 @@ get_header();
                             <?php 
                             $prod_hero_img_url = get_post_meta( get_the_ID(), 'prod_hero_img_url', true );
                             if ( $prod_hero_img_url ) : ?>
-                                <img src="<?php echo esc_url($prod_hero_img_url); ?>" alt="Інтерфейс програми" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                                <img src="<?php echo esc_url($prod_hero_img_url); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $prod_hero_img_url, 'Інтерфейс програми' ) ); ?>" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
                             <?php elseif ( has_post_thumbnail() ) : ?>
                                 <?php the_post_thumbnail('full'); ?>
                             <?php else: ?>
@@ -158,7 +158,7 @@ get_header();
                     ?>
                     <div class="zigzag-row<?php echo $reverse_class; ?>">
                         <div class="zigzag-image">
-                            <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($title); ?>">
+                            <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $img, $title ) ); ?>">
                         </div>
                         <div class="zigzag-text">
                             <h3><?php echo esc_html($title); ?></h3>

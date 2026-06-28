@@ -41,7 +41,7 @@ get_header();
                                 <?php 
                                 $promo_hero_img_url = get_post_meta( get_the_ID(), 'promo_hero_img_url', true );
                                 if ( $promo_hero_img_url ) : ?>
-                                    <img src="<?php echo esc_url($promo_hero_img_url); ?>" alt="<?php the_title_attribute(); ?>">
+                                    <img src="<?php echo esc_url($promo_hero_img_url); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $promo_hero_img_url, get_the_title() ) ); ?>">
                                 <?php elseif ( has_post_thumbnail() ) : ?>
                                     <?php the_post_thumbnail('medium_large'); ?>
                                 <?php else: ?>

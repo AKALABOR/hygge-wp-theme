@@ -65,7 +65,7 @@ get_header();
                         <?php 
                         $case_hero_img_url = get_post_meta( get_the_ID(), 'case_hero_img_url', true );
                         if ( $case_hero_img_url ) : ?>
-                            <img src="<?php echo esc_url($case_hero_img_url); ?>" alt="<?php the_title_attribute(); ?>" class="case-cover">
+                            <img src="<?php echo esc_url($case_hero_img_url); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $case_hero_img_url, get_the_title() ) ); ?>" class="case-cover">
                         <?php elseif ( has_post_thumbnail() ) : ?>
                             <?php the_post_thumbnail('full', array('class' => 'case-cover')); ?>
                         <?php else: ?>

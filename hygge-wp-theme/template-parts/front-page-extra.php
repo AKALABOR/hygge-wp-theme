@@ -147,7 +147,7 @@
             <div class="zigzag-row<?php echo $reverse_class; ?>">
                 <div class="zigzag-image">
                     <div class="placeholder-box">
-                        <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($title); ?>">
+                        <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $img, $title ) ); ?>">
                     </div>
                 </div>
                 <div class="zigzag-text">
@@ -222,7 +222,7 @@
                             elseif ($i == 5) $img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQe_3Bpehy4xABxhSMtqDrh28oi1pXu9K0mw&s';
                             else continue;
                         }
-                        echo '<div class="logo-card"><img src="' . esc_url($img) . '" alt="Integration"></div>';
+                        echo '<div class="logo-card"><img src="' . esc_url($img) . '" alt="' . esc_attr( hygge_get_image_alt( $img, 'Integration' ) ) . '"></div>';
                     }
                 }
                 ?>
@@ -273,7 +273,7 @@
             ?>
             <div class="case-card">
                 <div class="case-image">
-                    <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($tag); ?>">
+                    <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr( hygge_get_image_alt( $img, $tag ) ); ?>">
                     <span class="case-tag"><?php echo esc_html($tag); ?></span>
                 </div>
                 <div class="case-content">

@@ -163,7 +163,7 @@ function initHygge() {
                 submitBtn.disabled = true;
 
                 const formData = new FormData(form);
-                formData.append('action', 'submit_sap_form');
+                formData.set('action', 'submit_sap_form');
                 formData.append('nonce', hyggeAjax.nonce);
 
                 const existingMsg = form.querySelector('.sap-form-message');

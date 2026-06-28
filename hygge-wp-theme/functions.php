@@ -83,30 +83,30 @@ require_once get_template_directory() . '/inc/sap-b1-integration.php';
  */
 function hygge_handle_contact_form() {
     // 1. Check Nonce for security
-    if ( ! isset( $POST['hygge_contact_nonce'] ) || ! wp_verify_nonce( $POST['hygge_contact_nonce'], 'hygge_contact_action' ) ) {
+    if ( ! isset( $_POST['hygge_contact_nonce'] ) || ! wp_verify_nonce( $_POST['hygge_contact_nonce'], 'hygge_contact_action' ) ) {
         wp_die( 'Помилка перевірки безпеки. Будь ласка, спробуйте ще раз.' );
     }
 
-    $return_url = isset( $POST['return_url'] ) ? esc_url_raw( $POST['return_url'] ) : home_url();
+    $return_url = isset( $_POST['return_url'] ) ? esc_url_raw( $_POST['return_url'] ) : home_url();
 
     // 1.5. Spam Protection: Honeypot & Timestamp
     // If the hidden 'website_url' field is filled out, it's a bot.
-    if ( ! empty( $POST['website_url'] ) ) {
+    if ( ! empty( $_POST['website_url'] ) ) {
         // Silently reject, pretend it succeeded so the bot doesn't retry
         wp_redirect( add_query_arg( 'contact_success', '1', $return_url ) . '#contacts' );
         exit;
     }
     
     // If submitted too fast (less than 3 seconds), it's probably a bot.
-    $timestamp = isset( $POST['form_timestamp'] ) ? intval( $POST['form_timestamp'] ) : 0;
+    $timestamp = isset( $_POST['form_timestamp'] ) ? intval( $_POST['form_timestamp'] ) : 0;
     if ( time() - $timestamp < 3 ) {
         wp_die( 'Заявка відхилена. Можлива автоматизована спам-активність.' );
     }
 
     // 2. Sanitize inputs
-    $name    = isset( $POST['name'] ) ? sanitize_text_field( $POST['name'] ) : '';
-    $contact = isset( $POST['contact'] ) ? sanitize_text_field( $POST['contact'] ) : '';
-    $company = isset( $POST['company'] ) ? sanitize_text_field( $POST['company'] ) : '';
+    $name    = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
+    $contact = isset( $_POST['contact'] ) ? sanitize_text_field( $_POST['contact'] ) : '';
+    $company = isset( $_POST['company'] ) ? sanitize_text_field( $_POST['company'] ) : '';
 
     if ( empty( $name ) || empty( $contact ) ) {
         wp_die( 'Ім\'я та контакт є обов\'язковими.' );
@@ -153,4 +153,23 @@ function hygge_handle_contact_form() {
 add_action( 'admin_post_nopriv_hygge_contact_form', 'hygge_handle_contact_form' );
 add_action( 'admin_post_hygge_contact_form', 'hygge_handle_contact_form' );
 
+
+
+/**
+ * Helper function to get image alt text from Media Library.
+ */
+function hygge_get_image_alt( $image_url, $default_alt = '' ) {
+    if ( empty( $image_url ) ) return $default_alt;
+    
+    if ( function_exists( "attachment_url_to_postid" ) ) {
+        $attachment_id = attachment_url_to_postid( $image_url );
+        if ( $attachment_id ) {
+            $alt = get_post_meta( $attachment_id, "_wp_attachment_image_alt", true );
+            if ( ! empty( $alt ) ) {
+                return $alt;
+            }
+        }
+    }
+    return $default_alt;
+}
 
